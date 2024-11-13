@@ -23,4 +23,4 @@ jobs:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_TICKETS }}
               with:
                   args: >
-                      -Dsonar.projectBaseDir=auth
+                      -Dsonar.projectBaseDir=tickets
