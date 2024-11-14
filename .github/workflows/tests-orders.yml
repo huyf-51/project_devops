@@ -1,11 +1,11 @@
 name: tests-orders
 
 on:
-  push:
-      paths:
-          - 'orders/**'
-      branches:
-          - main
+    push:
+        paths:
+            - 'orders/**'
+        branches:
+            - main
 
 jobs:
     build:
