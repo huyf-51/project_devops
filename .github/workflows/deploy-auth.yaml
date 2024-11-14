@@ -18,6 +18,13 @@ jobs:
                   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
             - run: cd auth && docker build -t huyfst/auth .
 
+            - name: Cache Trivy DB
+              uses: actions/cache@v3
+              with:
+                path: ~/.cache/trivy
+                key: ${{ runner.os }}-trivy-db
+
+
             - name: Run Trivy vulnerability scanner
               uses: aquasecurity/trivy-action@master
               with:
