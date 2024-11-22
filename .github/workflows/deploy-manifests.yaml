@@ -18,7 +18,7 @@ jobs:
                   credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
             - name:
-              run: gcloud components install gke-gcloud-auth-plugin
+              run: sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
 
             # Configure kubectl with GKE
             - name: Configure kubectl
@@ -26,7 +26,3 @@ jobs:
                   gcloud container clusters get-credentials $GKE_CLUSTER_NAME --location=asia-southeast1-a
               env:
                   GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
-
-            # Update GKE deployment
-            - name: Update GKE Deployment
-              run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
