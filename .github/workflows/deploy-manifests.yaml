@@ -24,7 +24,3 @@ jobs:
               env:
                   GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
                   GKE_CLUSTER_REGION: ${{ secrets.GKE_CLUSTER_LOCATION }}
-
-            # Update GKE deployment
-            - name: Update GKE Deployment
-            - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
