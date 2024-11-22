@@ -20,6 +20,8 @@ jobs:
             # Configure kubectl with GKE
             - name: Configure kubectl
               run: |
+                    echo "GKE_CLUSTER_LOCATION is: $GKE_CLUSTER_LOCATION"
+              run: |
                   gcloud container clusters get-credentials $GKE_CLUSTER_NAME --location=$GKE_CLUSTER_LOCATION
               env:
                   GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
