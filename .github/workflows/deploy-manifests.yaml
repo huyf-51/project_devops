@@ -27,4 +27,4 @@ jobs:
 
             # Update GKE deployment
             - name: Update GKE Deployment
-              run: kubectl rollout restart deployment client-depl
+            - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
