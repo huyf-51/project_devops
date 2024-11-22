@@ -12,13 +12,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - name: Authenticate with GCP
-              uses: google-github-actions/auth@v1
+            - name: install the gcloud cli
+              uses: google-github-actions/setup-gcloud@v0
               with:
-                  credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-
-            - name:
-              run: sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
+                  project_id: ${{ secrets.GOOGLE_PROJECT }}
+                  service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+                  install_components: 'gke-gcloud-auth-plugin'
+                  export_default_credentials: true
 
             # Configure kubectl with GKE
             - name: Configure kubectl
