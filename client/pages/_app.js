@@ -1,8 +1,26 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import buildClient from '../api/build-client';
 import Header from '../components/header';
+import { useEffect, useState } from 'react';
 
-const AppComponent = ({ Component, pageProps, currentUser }) => {
+const AppComponent = ({ Component, pageProps, initialCurrentUser }) => {
+    const [currentUser, setCurrentUser] = useState(initialCurrentUser);
+
+    useEffect(() => {
+        if (!currentUser) {
+            const fetchCurrentUser = async () => {
+                try {
+                    const response = await fetch('/api/users/currentuser');
+                    const data = await response.json();
+                    setCurrentUser(data.currentUser || null);
+                } catch (error) {
+                    console.error('Error fetching current user:', error);
+                }
+            };
+            fetchCurrentUser();
+        }
+    }, [currentUser]);
+
     return (
         <div>
             <Header currentUser={currentUser} />
@@ -16,24 +34,26 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
 AppComponent.getInitialProps = async (appContext) => {
     const client = buildClient(appContext.ctx);
     let pageProps = {};
-    let data;
+    let initialCurrentUser = null;
+
     try {
-        res = await client.get('/api/users/currentuser');
-        data = res.data;
+        const res = await client.get('/api/users/currentuser');
+        initialCurrentUser = res.data.currentUser || null;
     } catch (error) {
-        data = { currentUser: null };
+        console.log('No current user found');
     }
+
     if (appContext.Component.getInitialProps) {
         pageProps = await appContext.Component.getInitialProps(
             appContext.ctx,
             client,
-            data.currentUser
+            initialCurrentUser
         );
     }
 
     return {
         pageProps,
-        ...data,
+        initialCurrentUser,
     };
 };
 
