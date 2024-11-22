@@ -20,7 +20,11 @@ jobs:
             # Configure kubectl with GKE
             - name: Configure kubectl
               run: |
-                  gcloud container clusters get-credentials $GKE_CLUSTER_NAME --location $GKE_CLUSTER_LOCATION
+                  gcloud container clusters get-credentials $GKE_CLUSTER_NAME --zone $GKE_CLUSTER_LOCATION
               env:
                   GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
                   GKE_CLUSTER_REGION: ${{ secrets.GKE_CLUSTER_LOCATION }}
+
+            # Update GKE deployment
+            - name: Update GKE Deployment
+              run: kubectl rollout restart deployment client-depl
