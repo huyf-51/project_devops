@@ -1,14 +1,14 @@
-name: tests-auth
+name: tests-expiration
 
 on:
     pull_request:
         paths:
-            - 'auth/**'
+            - 'expiration/**'
         branches:
             - dev
     push:
         paths:
-            - 'auth/**'
+            - 'expiration/**'
         branches:
             - dev
 
