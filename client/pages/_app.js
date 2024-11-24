@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 
 const AppComponent = ({ Component, pageProps, initialCurrentUser }) => {
     const [currentUser, setCurrentUser] = useState(initialCurrentUser);
-
     useEffect(() => {
         if (!currentUser) {
             const fetchCurrentUser = async () => {
