@@ -1,11 +1,16 @@
 name: tests-payments
 
 on:
+  pull_request:
+      paths:
+          - 'payments/**'
+      branches:
+          - dev
   push:
       paths:
           - 'payments/**'
       branches:
-          - main
+          - dev
 
 jobs:
   build:

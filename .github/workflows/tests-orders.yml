@@ -1,11 +1,16 @@
 name: tests-orders
 
 on:
+    pull_request:
+        paths:
+            - 'orders/**'
+        branches:
+            - dev
     push:
         paths:
             - 'orders/**'
         branches:
-            - main
+            - dev
 
 jobs:
     build:
