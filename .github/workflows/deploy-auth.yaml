@@ -7,9 +7,6 @@ on:
         paths:
             - 'auth/**'
 
-permissions:
-    security-events: write
-
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -28,22 +25,14 @@ jobs:
                   key: ${{ runner.os }}-trivy-db
 
             - name: Run Trivy vulnerability scanner
-              uses: aquasecurity/trivy-action@master
+              uses: aquasecurity/trivy-action@0.28.0
               with:
                   image-ref: 'huyfst/auth'
+                  format: 'table'
                   exit-code: '1'
                   ignore-unfixed: true
                   vuln-type: 'os,library'
-                  format: 'template'
-                  template: '@/contrib/sarif'
-                  output: 'trivy-results.sarif'
                   severity: 'CRITICAL,HIGH'
-                  cache: true
-
-            - name: Upload Trivy scan results to GitHub Security tab
-              uses: github/codeql-action/upload-sarif@v3
-              with:
-                  sarif_file: 'trivy-results.sarif'
 
             - name: Push to artifact env
               run: docker push huyfst/auth
