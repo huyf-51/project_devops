@@ -1,11 +1,16 @@
 name: tests-tickets
 
 on:
+    pull_request:
+        paths:
+            - 'tickets/**'
+        branches:
+            - dev
     push:
         paths:
             - 'tickets/**'
         branches:
-            - main
+            - dev
 
 jobs:
     build:
