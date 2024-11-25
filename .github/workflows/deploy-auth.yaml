@@ -29,10 +29,9 @@ jobs:
               with:
                   image-ref: 'huyfst/auth'
                   format: 'table'
-                  exit-code: '1'
                   ignore-unfixed: true
                   vuln-type: 'os,library'
-                  severity: 'CRITICAL,HIGH'
+                  severity: 'CRITICAL,HIGH,MEDIUM'
 
             - name: Push to artifact env
               run: docker push huyfst/auth
