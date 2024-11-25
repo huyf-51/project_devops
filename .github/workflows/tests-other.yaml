@@ -1,0 +1,21 @@
+name: tests-other
+
+on:
+    pull_request:
+        paths-ignore:
+            [
+                'auth/**',
+                'client/**',
+                'expiration/**',
+                'orders/**',
+                'payments/**',
+                'tickets/**',
+            ]
+        branches:
+            - dev
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
