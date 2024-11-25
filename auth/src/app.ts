@@ -24,7 +24,6 @@ apm.start({
 });
 
 const app = express();
-
 app.set('trust proxy', true);
 app.use(json());
 app.use(
