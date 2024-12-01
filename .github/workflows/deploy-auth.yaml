@@ -11,12 +11,17 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Login to dockerhub
+              run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
               env:
                   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
                   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-            - run: cd auth && docker build -t huyfst/auth .
+
+            - name: Build image
+              run: cd auth && docker build -t huyfst/auth .
 
             - name: Cache Trivy DB
               uses: actions/cache@v3
@@ -36,19 +41,13 @@ jobs:
             - name: Push to artifact env
               run: docker push huyfst/auth
 
-            - name: Authenticate with GCP
-              uses: google-github-actions/auth@v1
+            - name: Authenticate with DigitalOcean
+              uses: digitalocean/action-doctl@v2
               with:
-                  credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+                  token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-            # Configure kubectl with GKE
-            - name: Configure kubectl
-              run: |
-                  gcloud container clusters get-credentials $GKE_CLUSTER_NAME --location $GKE_CLUSTER_LOCATION
-              env:
-                  GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
-                  GKE_CLUSTER_REGION: ${{ secrets.GKE_CLUSTER_LOCATION }}
+            - name: Config kubectl
+              run: doctl kubernetes cluster kubeconfig save mycluster
 
-            # Update GKE deployment
-            - name: Update GKE Deployment
-              run: kubectl rollout restart deployment client-depl
+            - name: Update deployment
+              run: kubectl rollout restart deployment auth-depl

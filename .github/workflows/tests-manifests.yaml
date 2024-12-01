@@ -1,0 +1,19 @@
+name: tests-auth
+
+on:
+    pull_request:
+        paths:
+            - 'infra/k8s-prod/**'
+        branches:
+            - dev
+    push:
+        paths:
+            - 'infra/k8s-prod/**'
+        branches:
+            - dev
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3

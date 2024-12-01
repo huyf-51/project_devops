@@ -1,31 +1,31 @@
 name: tests-payments
 
 on:
-  pull_request:
-      paths:
-          - 'payments/**'
-      branches:
-          - dev
-  push:
-      paths:
-          - 'payments/**'
-      branches:
-          - dev
+    pull_request:
+        paths:
+            - 'payments/**'
+        branches:
+            - dev
+    push:
+        paths:
+            - 'payments/**'
+        branches:
+            - dev
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: cd payments && npm install && npm run test:ci
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-      - uses: actions/checkout@v4
-        with:
-            fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PAYMENTS }}
-        with:
-            args: >
-                -Dsonar.projectBaseDir=payments
+            - name: Build & Test
+              run: cd payments && npm install && npm run test:ci
+
+            - name: SonarCloud Scan
+              uses: SonarSource/sonarcloud-github-action@master
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PAYMENTS }}
+              with:
+                  args: >
+                      -Dsonar.projectBaseDir=payments
