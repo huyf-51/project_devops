@@ -26,6 +26,7 @@ apm.start({
 const transaction = apm.startTransaction('orders service');
 
 const app = express();
+
 app.set('trust proxy', true);
 app.use(json());
 app.use(
