@@ -26,6 +26,7 @@ function App() {
     useEffect(() => {
         getCurrentUser();
     }, []);
+
     return (
         <>
             <BrowserRouter>
