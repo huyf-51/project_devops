@@ -50,4 +50,4 @@ jobs:
               run: doctl kubernetes cluster kubeconfig save mycluster
 
             - name: Update deployment
-              run: kubectl rollout restart deployment tickets-depl
+              run: kubectl rollout restart deployment tickets-depl -n ingress-nginx
