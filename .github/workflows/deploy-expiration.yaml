@@ -11,10 +11,43 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Login to dockerhub
+              run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
               env:
                   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
                   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-            - run: cd expiration && docker build -t huyfst/expiration .
-            - run: docker push huyfst/expiration
+
+            - name: Build image
+              run: cd expiration && docker build -t huyfst/expiration .
+
+            - name: Cache Trivy DB
+              uses: actions/cache@v3
+              with:
+                  path: ~/.cache/trivy
+                  key: ${{ runner.os }}-trivy-db
+
+            - name: Run Trivy vulnerability scanner
+              uses: aquasecurity/trivy-action@0.28.0
+              with:
+                  image-ref: 'huyfst/expiration'
+                  format: 'table'
+                  ignore-unfixed: true
+                  vuln-type: 'os,library'
+                  severity: 'CRITICAL,HIGH,MEDIUM'
+
+            - name: Push to artifact env
+              run: docker push huyfst/expiration
+
+            - name: Authenticate with DigitalOcean
+              uses: digitalocean/action-doctl@v2
+              with:
+                  token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+            - name: Config kubectl
+              run: doctl kubernetes cluster kubeconfig save mycluster
+
+            - name: Update deployment
+              run: kubectl rollout restart deployment expiration-depl

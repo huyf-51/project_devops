@@ -12,16 +12,17 @@ import apm from 'elastic-apm-node';
 apm.start({
     // Override service name from package.json
     // Allowed characters: a-z, A-Z, 0-9, -, _, and space
-    serviceName: 'test',
+    serviceName: 'Auth',
 
     // Use if APM Server uses API keys for authentication
-    apiKey: 'YUZyTFZwTUJxbG9XOFlrLS1RenI6ZHBWMVBHQzFRMTZKN2lHY2FrYlJZUQ==',
+    apiKey: 'S2tsZGRwTUIweEJYYkt2Wk1sTDc6bU5iZVdMRHhSSHVkTnZ1TzRpMjlVUQ==',
 
     // Set custom APM Server URL (default: http://127.0.0.1:8200)
-    serverUrl: 'https://test-fd7764.apm.us-east-1.aws.elastic.cloud:443',
+    serverUrl: 'https://devops-d51db7.apm.us-east-1.aws.elastic.cloud:443',
 
-    environment: 'staging',
+    environment: 'production',
 });
+const transaction = apm.startTransaction('auth service');
 
 const app = express();
 app.set('trust proxy', true);
@@ -43,10 +44,13 @@ app.all('*', async (req, res) => {
 });
 
 app.use((err: any, req: any, res: any, next: any) => {
+    console.log('err>>>', err);
     apm.captureError(err);
     next(err);
 });
 
 app.use(errorHandler);
+
+transaction.end();
 
 export { app };
