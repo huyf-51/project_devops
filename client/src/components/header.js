@@ -22,7 +22,7 @@ export default ({ currentUser }) => {
     return (
         <nav className="navbar navbar-light bg-light">
             <Link className="navbar-brand" to="/">
-                Ticket Shop
+                devops
             </Link>
 
             <div className="d-flex justify-content-end">
